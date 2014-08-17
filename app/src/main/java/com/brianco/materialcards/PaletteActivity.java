@@ -266,7 +266,7 @@ public class PaletteActivity extends Activity {
 
     private void setThemeDark(final boolean dark) {
         mDark = dark;
-        final int colorResource = dark ? R.color.pure_black : R.color.pure_white;
+        final int colorResource = dark ? R.color.pure_grey : R.color.pure_white;
         getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(colorResource)));
         setMenuItemDark(mDark);
         mPrefs.edit().putBoolean(DARK_THEME, mDark).apply();
@@ -278,7 +278,7 @@ public class PaletteActivity extends Activity {
         }
         final int stringResource = dark ? R.string.go_light : R.string.go_dark;
         mChangeThemeMenuItem.setTitle(stringResource);
-        final int colorResource = dark ? R.color.pure_white : R.color.pure_black;
+        final int colorResource = dark ? R.color.pure_white : R.color.pure_grey;
         final Drawable drawable = getResources().getDrawable(R.drawable.dot);
         drawable.setColorFilter(getResources().getColor(colorResource), PorterDuff.Mode.SRC);
         mChangeThemeMenuItem.setIcon(drawable);

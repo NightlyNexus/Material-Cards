@@ -2,7 +2,7 @@
 <resources>
     <color name="nav_drawer">#DBBB</color>
     <color name="pure_white">#FFFF</color>
-    <color name="pure_black">#F000</color>
+    <color name="pure_grey">#F777</color>
     <!-- google's material design colours from
     http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <!--reds-->
