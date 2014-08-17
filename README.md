@@ -1,4 +1,4 @@
-MaterialDesignColorPalette
+Material Cards
 ==========================
 
 A cool way to check out Material Deign colors
