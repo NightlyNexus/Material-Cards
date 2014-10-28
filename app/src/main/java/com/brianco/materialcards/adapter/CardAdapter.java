@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Vibrator;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +25,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final CardView cardView;
+        private final View cardView;
         private final TextView baseColorView;
         private final TextView colorHexView;
         private final ImageView copyView;
 
         public ViewHolder(final View view) {
             super(view);
-            cardView = (CardView) view;
+            cardView = view;
             baseColorView = (TextView) cardView.findViewById(R.id.base_name);
             colorHexView = (TextView) cardView.findViewById(R.id.hex_value);
             copyView = (ImageView) cardView.findViewById(R.id.copy_icon);
