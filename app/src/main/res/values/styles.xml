@@ -1,6 +1,7 @@
 <resources>
 
     <style name="AppTheme" parent="AppThemeBase">
+        <item name="colorPrimary">@color/color_primary</item>
         <item name="android:windowBackground">@color/pure_white</item>
     </style>
 
