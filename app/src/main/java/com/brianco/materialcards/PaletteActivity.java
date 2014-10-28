@@ -1,6 +1,5 @@
 package com.brianco.materialcards;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -12,13 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -28,7 +28,7 @@ import com.brianco.materialcards.model.PaletteColorSection;
 
 import java.util.ArrayList;
 
-public class PaletteActivity extends Activity {
+public class PaletteActivity extends ActionBarActivity {
 
     public static final String ACTION_START_COLOR
             = "com.brianco.materialcards.PaletteActivity.ACTION_START_COLOR";
@@ -50,6 +50,7 @@ public class PaletteActivity extends Activity {
     private ArrayList<PaletteColorSection> mColorList = null;
     private CharSequence mDrawerTitle = null;
     private CharSequence mTitle = null;
+    private Toolbar mToolBar;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -67,7 +68,7 @@ public class PaletteActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        mToolBar.setTitle(mTitle);
     }
 
     @Override
@@ -96,11 +97,13 @@ public class PaletteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_palette);
 
+        mToolBar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.navigation_drawer);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        setSupportActionBar(mToolBar);
+        //mToolBar.setDisplayHomeAsUpEnabled(true);
+        //mToolBar.setHomeButtonEnabled(true);
 
         final String[] colorSectionsNames
                 = getResources().getStringArray(R.array.color_sections_names);
@@ -148,7 +151,7 @@ public class PaletteActivity extends Activity {
         mDrawerList.setAdapter(new DrawerAdapter(this, mColorList));
         mDrawerList.setOnItemClickListener(drawerClickListener);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+                mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 doDrawerClosed();
@@ -163,12 +166,12 @@ public class PaletteActivity extends Activity {
     }
 
     private void doDrawerClosed() {
-        getActionBar().setTitle(mTitle);
+        mToolBar.setTitle(mTitle);
         invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
     }
 
     private void doDrawerOpened() {
-        getActionBar().setTitle(mDrawerTitle);
+        mToolBar.setTitle(mDrawerTitle);
         invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
     }
 
@@ -197,10 +200,9 @@ public class PaletteActivity extends Activity {
         }
         mDrawerList.setItemChecked(mPosition, true);
         setTitle(sectionName);
-        getActionBar().setBackgroundDrawable(new ColorDrawable(sectionValue));
-        final Window window = getWindow();
+        mToolBar.setBackgroundColor(sectionValue);
         final int darkenedColor = getDarkenedColor(sectionValue);
-        window.setStatusBarColor(darkenedColor);
+        mDrawerLayout.setStatusBarBackgroundColor(darkenedColor);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 

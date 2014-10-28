@@ -47,7 +47,8 @@ public class PaletteFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
-            public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
+            public void getItemOffsets(Rect outRect, View view,
+                                       RecyclerView parent, RecyclerView.State state) {
                 outRect.set(0, 0, 0, (int) getResources().getDimension(R.dimen.card_spacing));
             }
         });
