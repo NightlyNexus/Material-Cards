@@ -1,13 +1,16 @@
 package com.brianco.materialcards;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -203,6 +206,13 @@ public class PaletteActivity extends ActionBarActivity {
         mToolBar.setBackgroundColor(sectionValue);
         final int darkenedColor = getDarkenedColor(sectionValue);
         mDrawerLayout.setStatusBarBackgroundColor(darkenedColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final ActivityManager.TaskDescription taskDescription
+                    = new ActivityManager.TaskDescription(getString(R.string.app_name),
+                    BitmapFactory.decodeResource(getResources(),
+                            R.drawable.ic_launcher), sectionValue);
+            setTaskDescription(taskDescription);
+        }
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
