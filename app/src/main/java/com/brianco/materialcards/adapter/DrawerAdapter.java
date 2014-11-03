@@ -1,9 +1,12 @@
 package com.brianco.materialcards.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +45,15 @@ public class DrawerAdapter extends ArrayAdapter<PaletteColorSection> {
 
         final PaletteColorSection paletteColorSection = mColorList.get(position);
         final String colorName = paletteColorSection.getColorSectionName();
+        final int colorValue = paletteColorSection.getColorSectionValue();
         holder.textView.setText(colorName);
         final StateListDrawable sld = new StateListDrawable();
-        final Drawable d = new ColorDrawable(paletteColorSection.getColorSectionValue());
-        sld.addState(new int[] { android.R.attr.state_pressed }, d);
+        final Drawable d = new ColorDrawable(colorValue);
+        final Drawable r = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                ? new RippleDrawable(new ColorStateList(new int[][]{{}},
+                new int[]{colorValue}), null, null)
+                : d;
+        sld.addState(new int[] { android.R.attr.state_pressed }, r);
         sld.addState(new int[] { android.R.attr.state_checked }, d);
         holder.textView.setBackground(sld);
         return convertView;
