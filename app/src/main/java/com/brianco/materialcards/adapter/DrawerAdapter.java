@@ -21,14 +21,12 @@ import java.util.List;
 public class DrawerAdapter extends ArrayAdapter<PaletteColorSection> {
 
     private static final int LAYOUT_RESOURCE = R.layout.nav_item;
-    private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private List<PaletteColorSection> mColorList;
 
     public DrawerAdapter(Context context, List<PaletteColorSection> colorList) {
         super(context, LAYOUT_RESOURCE, colorList);
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(mContext);
+        mLayoutInflater = LayoutInflater.from(context);
         mColorList = colorList;
     }
 
