@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Vibrator;
-import android.support.v7.widget.MyRoundRectDrawableWithShadow;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,12 +69,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         final int textColorResource = dark ? R.color.md_white_1000 : R.color.md_black_1000;
         final int textColor = mResources.getColor(textColorResource);
         final int copyIconResource = dark ? R.drawable.ic_action_copy_dark : R.drawable.ic_action_copy_light;
-        // holder.cardView.setBackgroundColor(colorHex);
-        final MyRoundRectDrawableWithShadow backgroundHack
-                = new MyRoundRectDrawableWithShadow(mResources, colorHex, 0,
-                mResources.getDimension(R.dimen.shadow_size_hack),
-                        mResources.getDimension(R.dimen.max_shadow_size_hack));
-        holder.cardView.setBackground(backgroundHack);
+        holder.cardView.setBackgroundColor(colorHex);
         holder.colorHexView.setText(colorHexString);
         holder.colorHexView.setTextColor(textColor);
         holder.baseColorView.setText(colorBaseName);
