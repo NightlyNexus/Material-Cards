@@ -155,14 +155,22 @@ public class PaletteActivity extends ActionBarActivity {
         mDrawerList.setOnItemClickListener(drawerClickListener);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 doDrawerClosed();
             }
 
+            @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 doDrawerOpened();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // disable hamburger-arrow animation
+                super.onDrawerSlide(drawerView, 0);
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
