@@ -20,12 +20,11 @@ import java.util.List;
 
 public class DrawerAdapter extends ArrayAdapter<PaletteColorSection> {
 
-    private static final int LAYOUT_RESOURCE = R.layout.nav_item;
     private final LayoutInflater mLayoutInflater;
     private List<PaletteColorSection> mColorList;
 
     public DrawerAdapter(Context context, List<PaletteColorSection> colorList) {
-        super(context, LAYOUT_RESOURCE, colorList);
+        super(context, 0, colorList);
         mLayoutInflater = LayoutInflater.from(context);
         mColorList = colorList;
     }
@@ -34,7 +33,7 @@ public class DrawerAdapter extends ArrayAdapter<PaletteColorSection> {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(LAYOUT_RESOURCE, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.nav_item, parent, false);
             holder = new ViewHolder((TextView) convertView);
             convertView.setTag(holder);
         } else {

@@ -15,6 +15,6 @@
     <dimen name="hover_move_threshold">10dp</dimen>
 
     <dimen name="card_height">144dp</dimen>
-    <dimen name="card_spacing">14dp</dimen>
+    <dimen name="card_spacing">8dp</dimen>
 
 </resources>
