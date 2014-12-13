@@ -2,6 +2,7 @@
 <resources>
     <color name="color_primary">#FBBB</color>
     <color name="nav_drawer">#DBBB</color>
+    <color name="nav_drawer_dark">#D777</color>
     <color name="pure_white">#FFFF</color>
     <color name="pure_grey">#F777</color>
     <!-- google's material design colours from

@@ -54,6 +54,7 @@ public class PaletteActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle = null;
     private CharSequence mTitle = null;
     private Toolbar mToolBar;
+    private View mDrawerView;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -102,11 +103,13 @@ public class PaletteActivity extends ActionBarActivity {
 
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.navigation_drawer);
+        mDrawerView = findViewById(R.id.navigation_drawer);
+        mDrawerList = (ListView) findViewById(R.id.navigation_drawer_list);
+
+        mDrawerList.setPadding(0, getStatusBarHeight(), 0, 0);
+        mDrawerList.setClipToPadding(false);
 
         setSupportActionBar(mToolBar);
-        //mToolBar.setDisplayHomeAsUpEnabled(true);
-        //mToolBar.setHomeButtonEnabled(true);
 
         final String[] colorSectionsNames
                 = getResources().getStringArray(R.array.color_sections_names);
@@ -144,7 +147,7 @@ public class PaletteActivity extends ActionBarActivity {
                 = mPrefs.getBoolean(FIRST_RUN, true);
         if (firstRun) {
             mPrefs.edit().putBoolean(FIRST_RUN, false).apply();
-            mDrawerLayout.openDrawer(mDrawerList);
+            mDrawerLayout.openDrawer(mDrawerView);
         }
         final boolean darkTheme = mPrefs.getBoolean(DARK_THEME, false);
         setThemeDark(darkTheme);
@@ -221,7 +224,7 @@ public class PaletteActivity extends ActionBarActivity {
                             R.drawable.ic_launcher), sectionValue);
             setTaskDescription(taskDescription);
         }
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(mDrawerView);
     }
 
     @Override
@@ -230,7 +233,7 @@ public class PaletteActivity extends ActionBarActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
 
-        if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+        if (mDrawerLayout.isDrawerOpen(mDrawerView)) {
             doDrawerOpened();
         } else {
             doDrawerClosed();
@@ -269,15 +272,15 @@ public class PaletteActivity extends ActionBarActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        final boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        final boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerView);
         mChangeThemeMenuItem.setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-            mDrawerLayout.closeDrawer(mDrawerList);
+        if (mDrawerLayout.isDrawerOpen(mDrawerView)) {
+            mDrawerLayout.closeDrawer(mDrawerView);
         } else {
             super.onBackPressed();
         }
@@ -311,6 +314,15 @@ public class PaletteActivity extends ActionBarActivity {
         final Drawable drawable = getResources().getDrawable(R.drawable.dot);
         drawable.setColorFilter(getResources().getColor(colorResource), PorterDuff.Mode.SRC);
         mChangeThemeMenuItem.setIcon(drawable);
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private static int getDarkenedColor(final int color) {
