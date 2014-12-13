@@ -3,6 +3,9 @@ package com.brianco.materialcards.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Vibrator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -69,7 +72,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         final int textColorResource = dark ? R.color.md_white_1000 : R.color.md_black_1000;
         final int textColor = mResources.getColor(textColorResource);
         final int copyIconResource = dark ? R.drawable.ic_action_copy_dark : R.drawable.ic_action_copy_light;
-        holder.cardView.setBackgroundColor(colorHex);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.cardView.setBackgroundColor(colorHex);
+        } else {
+            Drawable d = holder.cardView.getBackground();
+            d.setColorFilter(colorHex, PorterDuff.Mode.MULTIPLY);
+        }
         holder.colorHexView.setText(colorHexString);
         holder.colorHexView.setTextColor(textColor);
         holder.baseColorView.setText(colorBaseName);
