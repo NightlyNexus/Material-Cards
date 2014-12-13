@@ -275,6 +275,15 @@ public class PaletteActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+            mDrawerLayout.closeDrawer(mDrawerList);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         getFragmentManager().putFragment(outState, FRAGMENT_KEY, mFragment);
         outState.putParcelableArrayList(COLOR_LIST_KEY, mColorList);
