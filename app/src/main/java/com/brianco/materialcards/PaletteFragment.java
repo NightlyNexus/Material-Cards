@@ -19,12 +19,11 @@ public class PaletteFragment extends Fragment {
     public static final String ARG_COLORS = "ARG_COLORS";
 
     private static final String COLORS_KEY = "COLORS_KEY";
-    private static final int SCROLL_TO_TOP_MILLIS = 300;
 
-    private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
     private CardAdapter mAdapter;
-    private ArrayList<PaletteColor> mColors = null;
+    private ArrayList<PaletteColor> mColors;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,15 +31,19 @@ public class PaletteFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             mColors = savedInstanceState.getParcelableArrayList(COLORS_KEY);
-        }
-        if (mColors == null) {
+        } else {
             ArrayList<PaletteColor> colors = getArguments().getParcelableArrayList(ARG_COLORS);
             mColors = new ArrayList<PaletteColor>(colors);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mAdapter = new CardAdapter(getActivity(), mColors);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -55,10 +58,6 @@ public class PaletteFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
     }
 
-    public boolean isColorsAdded() {
-        return mColors != null;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(COLORS_KEY, mColors);
@@ -68,16 +67,15 @@ public class PaletteFragment extends Fragment {
     public void replaceColorCardList(ArrayList<PaletteColor> colors) {
         mColors.clear();
         mColors.addAll(colors);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, mColors.size());
         if (mAdapter.getItemCount() > 0) {
             mRecyclerView.scrollToPosition(0);
         }
     }
 
     public void scrollToTop() {
-        if (mColors.size() > 0) {
+        if (mAdapter.getItemCount() > 0) {
             mRecyclerView.smoothScrollToPosition(0);
-            //mRecyclerView.smoothScrollToPositionFromTop(0, 0, SCROLL_TO_TOP_MILLIS);
         }
     }
 }

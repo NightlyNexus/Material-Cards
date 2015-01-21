@@ -52,7 +52,11 @@ public class DrawerAdapter extends ArrayAdapter<PaletteColorSection> {
                 : d;
         sld.addState(new int[] { android.R.attr.state_pressed }, r);
         sld.addState(new int[] { android.R.attr.state_checked }, d);
-        holder.textView.setBackground(sld);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            holder.textView.setBackground(sld);
+        } else {
+            holder.textView.setBackgroundDrawable(sld);
+        }
         return convertView;
     }
 

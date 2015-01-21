@@ -40,32 +40,30 @@ public class PaletteActivity extends ActionBarActivity {
     private static final String FIRST_RUN = "FIRST_RUN";
     private static final String DARK_THEME = "DARK_THEME";
     private static final String FRAGMENT_TAG = "FRAGMENT_TAG";
-    private static final String FRAGMENT_KEY = "FRAGMENT_KEY";
     private static final String COLOR_LIST_KEY = "COLOR_LIST_KEY";
     private static final String POSITION_KEY = "POSITION_KEY";
-    private static final String DRAWER_TITLE_KEY = "DRAWER_TITLE_KEY";
-    private static final String TITLE_KEY = "TITLE_KEY";
 
     private SharedPreferences mPrefs;
     private boolean mDark;
-    private MenuItem mChangeThemeMenuItem = null;
-    private PaletteFragment mFragment = null;
-    private ArrayList<PaletteColorSection> mColorList = null;
-    private CharSequence mDrawerTitle = null;
-    private CharSequence mTitle = null;
+    private MenuItem mChangeThemeMenuItem;
+    private PaletteFragment mFragment;
+    private ArrayList<PaletteColorSection> mColorList;
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
     private Toolbar mToolBar;
     private View mDrawerView;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private int mPosition = 0;
-    private int[] mColorSecionsValues;
+    private int mPosition;
+    private int[] mColorSectionsValues;
 
-    private final ListView.OnItemClickListener drawerClickListener = new ListView.OnItemClickListener() {
+    private final ListView.OnItemClickListener drawerClickListener
+            = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(final AdapterView parent, final View view,
                                 final int position, final long id) {
-            selectItem(position, null);
+            selectItem(position);
         }
     };
 
@@ -88,8 +86,8 @@ public class PaletteActivity extends ActionBarActivity {
         }
         if (ACTION_START_COLOR.equals(intent.getAction())) {
             final int sectionValue = intent.getIntExtra(COLOR_SECTION_VALUE_EXTRA, 0);
-            final int sectionIndex = findIndex(mColorSecionsValues, sectionValue);
-            selectItem(sectionIndex, null);
+            final int sectionIndex = findIndex(mColorSectionsValues, sectionValue);
+            selectItem(sectionIndex);
             intent.setAction(Intent.ACTION_DEFAULT);
             return true;
         }
@@ -100,6 +98,8 @@ public class PaletteActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_palette);
+
+        mDrawerTitle = getTitle();
 
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -113,36 +113,36 @@ public class PaletteActivity extends ActionBarActivity {
 
         final String[] colorSectionsNames
                 = getResources().getStringArray(R.array.color_sections_names);
-        mColorSecionsValues
+        mColorSectionsValues
                 = getResources().getIntArray(R.array.color_sections_colors);
 
         if (savedInstanceState != null) {
-            mFragment = (PaletteFragment) getFragmentManager()
-                    .getFragment(savedInstanceState, FRAGMENT_KEY);
             mColorList = savedInstanceState.getParcelableArrayList(COLOR_LIST_KEY);
             mPosition = savedInstanceState.getInt(POSITION_KEY);
-            mDrawerTitle = savedInstanceState.getCharSequence(DRAWER_TITLE_KEY);
-            mTitle = savedInstanceState.getCharSequence(TITLE_KEY);
-        }
-        if (mColorList == null) {
+        } else {
             mColorList = PaletteColorSection.getPaletteColorSectionsList(colorSectionsNames,
-                mColorSecionsValues, getBaseColorNames(colorSectionsNames),
+                    mColorSectionsValues, getBaseColorNames(colorSectionsNames),
                     getColorValues(colorSectionsNames));
+            mPosition = 0;
         }
-        if (mDrawerTitle == null) {
-            mDrawerTitle = getTitle();
-        }
-        if (mTitle == null) {
-            mTitle = getTitle();
+        mFragment = (PaletteFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        if (mFragment == null) {
+            mFragment = new PaletteFragment();
+            final Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(PaletteFragment.ARG_COLORS,
+                    mColorList.get(mPosition).getPaletteColorList());
+            mFragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().replace(R.id.container, mFragment,
+                    FRAGMENT_TAG).commit();
         }
 
         setupNavigationDrawer();
 
-        if (!handleIntent(getIntent())) {
-            selectItem(mPosition, mFragment);
-        }
+        selectItemActivityUi(mColorList.get(mPosition));
 
-        mPrefs= PreferenceManager.getDefaultSharedPreferences(this);
+        handleIntent(getIntent());
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean firstRun
                 = mPrefs.getBoolean(FIRST_RUN, true);
         if (firstRun) {
@@ -189,29 +189,22 @@ public class PaletteActivity extends ActionBarActivity {
         invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
     }
 
-    private void selectItem(final int position, final PaletteFragment fragment) {
+    private void selectItem(final int position) {
         final PaletteColorSection paletteColorSection = mColorList.get(position);
         final ArrayList<PaletteColor> colors = paletteColorSection.getPaletteColorList();
-        final String sectionName = paletteColorSection.getColorSectionName();
-        final int sectionValue = paletteColorSection.getColorSectionValue();
-        if (mPosition == position && mFragment != null && mFragment.isColorsAdded()) {
+        if (mPosition == position) {
             mFragment.scrollToTop();
-        } else if (mFragment != null && mFragment.isColorsAdded()) {
-            mPosition = position;
-            mFragment.replaceColorCardList(colors);
         } else {
             mPosition = position;
-            if (fragment == null) {
-                final Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(PaletteFragment.ARG_COLORS, colors);
-                mFragment = new PaletteFragment();
-                mFragment.setArguments(bundle);
-            } else {
-                mFragment = fragment;
-            }
-            getFragmentManager().beginTransaction().replace(R.id.container, mFragment,
-                    FRAGMENT_TAG).commit();
+            mFragment.replaceColorCardList(colors);
         }
+        selectItemActivityUi(paletteColorSection);
+        mDrawerLayout.closeDrawer(mDrawerView);
+    }
+
+    private void selectItemActivityUi(final PaletteColorSection paletteColorSection) {
+        final String sectionName = paletteColorSection.getColorSectionName();
+        final int sectionValue = paletteColorSection.getColorSectionValue();
         mDrawerList.setItemChecked(mPosition, true);
         setTitle(sectionName);
         mToolBar.setBackgroundColor(sectionValue);
@@ -224,7 +217,6 @@ public class PaletteActivity extends ActionBarActivity {
                             R.drawable.ic_launcher), sectionValue);
             setTaskDescription(taskDescription);
         }
-        mDrawerLayout.closeDrawer(mDrawerView);
     }
 
     @Override
@@ -288,11 +280,8 @@ public class PaletteActivity extends ActionBarActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        getFragmentManager().putFragment(outState, FRAGMENT_KEY, mFragment);
         outState.putParcelableArrayList(COLOR_LIST_KEY, mColorList);
         outState.putInt(POSITION_KEY, mPosition);
-        outState.putCharSequence(DRAWER_TITLE_KEY, mDrawerTitle);
-        outState.putCharSequence(TITLE_KEY, mTitle);
         super.onSaveInstanceState(outState);
     }
 
@@ -318,15 +307,13 @@ public class PaletteActivity extends ActionBarActivity {
 
     private int getStatusBarHeight() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int result = 0;
-            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            final int resourceId = getResources()
+                    .getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
-                result = getResources().getDimensionPixelSize(resourceId);
+                return getResources().getDimensionPixelSize(resourceId);
             }
-            return result;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     private static int getDarkenedColor(final int color) {
