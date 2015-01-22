@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Vibrator;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +26,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final View cardView;
+        private final CardView cardView;
         private final TextView baseColorView;
         private final TextView colorHexView;
         private final ImageView copyView;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(final CardView view) {
             super(view);
             cardView = view;
             baseColorView = (TextView) cardView.findViewById(R.id.base_name);
@@ -47,7 +48,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View v = LayoutInflater.from(parent.getContext())
+        final CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card, parent, false);
         return new ViewHolder(v);
     }
@@ -69,7 +70,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         final int textColorResource = dark ? R.color.md_white_1000 : R.color.md_black_1000;
         final int textColor = mResources.getColor(textColorResource);
         final int copyIconResource = dark ? R.drawable.ic_action_copy_dark : R.drawable.ic_action_copy_light;
-        holder.cardView.setBackgroundColor(colorHex);
+        holder.cardView.setCardBackgroundColor(colorHex);
         holder.colorHexView.setText(colorHexString);
         holder.colorHexView.setTextColor(textColor);
         holder.baseColorView.setText(colorBaseName);

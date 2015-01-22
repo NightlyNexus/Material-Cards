@@ -79,19 +79,17 @@ public class PaletteActivity extends ActionBarActivity {
         handleIntent(intent);
     }
 
-    private boolean handleIntent(final Intent intent) {
+    // returns the sectionIndex
+    private int handleIntent(final Intent intent) {
         if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
             // Activity launched from history
-            return false;
+            return -1;
         }
         if (ACTION_START_COLOR.equals(intent.getAction())) {
-            final int sectionValue = intent.getIntExtra(COLOR_SECTION_VALUE_EXTRA, 0);
-            final int sectionIndex = findIndex(mColorSectionsValues, sectionValue);
-            selectItem(sectionIndex);
-            intent.setAction(Intent.ACTION_DEFAULT);
-            return true;
+            final int sectionValue = intent.getIntExtra(COLOR_SECTION_VALUE_EXTRA, -1);
+            return findIndex(mColorSectionsValues, sectionValue);
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -123,7 +121,10 @@ public class PaletteActivity extends ActionBarActivity {
             mColorList = PaletteColorSection.getPaletteColorSectionsList(colorSectionsNames,
                     mColorSectionsValues, getBaseColorNames(colorSectionsNames),
                     getColorValues(colorSectionsNames));
-            mPosition = 0;
+            mPosition = handleIntent(getIntent());
+            if (mPosition < 0) {
+                mPosition = 0;
+            }
         }
         mFragment = (PaletteFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         if (mFragment == null) {
@@ -139,8 +140,6 @@ public class PaletteActivity extends ActionBarActivity {
         setupNavigationDrawer();
 
         selectItemActivityUi(mColorList.get(mPosition));
-
-        handleIntent(getIntent());
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean firstRun
