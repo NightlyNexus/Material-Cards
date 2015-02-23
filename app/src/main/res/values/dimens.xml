@@ -1,7 +1,4 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
@@ -14,7 +11,10 @@
     <dimen name="hover_y_offset_from_top">72dp</dimen>
     <dimen name="hover_move_threshold">10dp</dimen>
 
+    <dimen name="recycler_padding_horizontal">8dp</dimen>
+    <dimen name="recycler_padding_vertical">8dp</dimen>
+
     <dimen name="card_height">144dp</dimen>
-    <dimen name="card_spacing">8dp</dimen>
+    <dimen name="card_spacing">@dimen/recycler_padding_vertical</dimen>
 
 </resources>

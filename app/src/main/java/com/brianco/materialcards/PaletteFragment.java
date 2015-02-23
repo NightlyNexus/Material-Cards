@@ -52,6 +52,7 @@ public class PaletteFragment extends Fragment {
             @Override
             public void getItemOffsets(Rect outRect, View view,
                                        RecyclerView parent, RecyclerView.State state) {
+                if (parent.getChildPosition(view) < mAdapter.getItemCount() - 1)
                 outRect.set(0, 0, 0, (int) getResources().getDimension(R.dimen.card_spacing));
             }
         });
