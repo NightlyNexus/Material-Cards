@@ -216,7 +216,7 @@ public class PaletteActivity extends ActionBarActivity {
             final ActivityManager.TaskDescription taskDescription
                     = new ActivityManager.TaskDescription(getString(R.string.app_name),
                     BitmapFactory.decodeResource(getResources(),
-                            R.drawable.ic_launcher), sectionValue);
+                            R.mipmap.ic_launcher), sectionValue);
             setTaskDescription(taskDescription);
         }
     }

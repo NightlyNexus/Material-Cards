@@ -5,7 +5,7 @@
     <color name="nav_drawer_dark">#D777</color>
     <color name="pure_white">#FFFF</color>
     <color name="pure_grey">#F777</color>
-    <!-- google's material design colours from
+    <!-- Google's material design colours from
     http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <!--reds-->
     <array name="reds">
