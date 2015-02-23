@@ -76,7 +76,10 @@ public class PaletteActivity extends ActionBarActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        handleIntent(intent);
+        final int sectionIndex = handleIntent(intent);
+        if (sectionIndex >= 0) {
+            selectItem(sectionIndex);
+        }
     }
 
     // returns the sectionIndex
