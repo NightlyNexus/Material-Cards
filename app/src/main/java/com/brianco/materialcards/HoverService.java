@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -119,7 +120,7 @@ public class HoverService extends Service {
         final Intent stopIntent = new Intent(STOP_FILTER);
         final PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, STOP_REQUEST_CODE,
                 stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final Notification.Builder builder = new Notification.Builder(this)
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.hover)
                 .setLargeIcon(drawableToBitmap(drawable))
                 .setContentTitle(getString(R.string.app_name))
