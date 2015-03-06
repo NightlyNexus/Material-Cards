@@ -26,8 +26,10 @@ public class PaletteFragment extends Fragment {
     private ArrayList<PaletteColor> mColors;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_color_palette, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_color_palette,
+                container, false);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class PaletteFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mAdapter = new CardAdapter(getActivity(), mColors);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

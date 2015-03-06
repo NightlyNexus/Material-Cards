@@ -22,12 +22,16 @@ public class PaletteColor implements Parcelable {
     public PaletteColor(final int hex, final String baseName, final String parentName,
                         final int parentHex) {
         this.hex = hex;
-        this.isDark = 0.2126 * Color.red(hex)
-                + 0.7152 * Color.green(hex) + 0.0722 * Color.blue(hex) < 128;
+        this.isDark = isDark(hex);
         this.hexString = String.format("#%06X", 0xFFFFFF & this.hex);
         this.baseName = baseName;
         this.parentName = parentName;
         this.parentHex = parentHex;
+    }
+
+    public static boolean isDark(final int hex) {
+        return 0.2126 * Color.red(hex)
+                + 0.7152 * Color.green(hex) + 0.0722 * Color.blue(hex) < 128;
     }
 
     public int getHex() {

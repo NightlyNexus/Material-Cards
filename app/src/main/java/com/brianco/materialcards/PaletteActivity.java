@@ -210,6 +210,16 @@ public class PaletteActivity extends ActionBarActivity {
         mDrawerList.setItemChecked(mPosition, true);
         setTitle(sectionName);
         mToolBar.setBackgroundColor(sectionValue);
+        final boolean dark = PaletteColor.isDark(sectionValue);
+        mToolBar.setTitleTextColor(getResources().getColor(
+                dark ? R.color.md_white_1000 : R.color.md_black_1000));
+        mToolBar.post(new Runnable() {
+            @Override
+            public void run() {
+                getSupportActionBar().setHomeAsUpIndicator(
+                        dark ? R.drawable.ic_menu_white : R.drawable.ic_menu_black);
+            }
+        });
         final int darkenedColor = getDarkenedColor(sectionValue);
         mDrawerLayout.setStatusBarBackgroundColor(darkenedColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -290,7 +300,8 @@ public class PaletteActivity extends ActionBarActivity {
     private void setThemeDark(final boolean dark) {
         mDark = dark;
         final int colorResource = dark ? R.color.pure_grey : R.color.pure_white;
-        getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(colorResource)));
+        getWindow().setBackgroundDrawable(
+                new ColorDrawable(getResources().getColor(colorResource)));
         setMenuItemDark(mDark);
         mPrefs.edit().putBoolean(DARK_THEME, mDark).apply();
     }
@@ -429,9 +440,9 @@ public class PaletteActivity extends ActionBarActivity {
         }
     }
 
-    private static int findIndex(int[] hackstack, int needle) {
-        for (int i = 0; i < hackstack.length; i++) {
-            if (hackstack[i] == needle) {
+    private static int findIndex(int[] haystack, int needle) {
+        for (int i = 0; i < haystack.length; i++) {
+            if (haystack[i] == needle) {
                 return i;
             }
         }
